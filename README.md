@@ -1,4 +1,4 @@
-![image]([https://github.com/user-attachments/assets/35cd2c8c-cb60-41ae-8b70-2c37acd835a4](https://github.com/aitalentfactory/Saddah/blob/main/football-net.png))
+![image](https://github.com/aitalentfactory/Saddah/blob/main/football-net.png)
 
  Saddah
 The system analyses player data (fitness levels, past injuries, performance stats). AI adjusts training schedules dynamically based on real-time insights.
