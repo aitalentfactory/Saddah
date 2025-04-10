@@ -1,4 +1,4 @@
-![image](https://github.com/aitalentfactory/Saddah/blob/main/صده.png)
+![image](https://github.com/aitalentfactory/Saddah/blob/main/صده.jpg)
 
  Saddah
 The system analyses player data (fitness levels, past injuries, performance stats). AI adjusts training schedules dynamically based on real-time insights.
