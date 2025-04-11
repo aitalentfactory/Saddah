@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج تسجيل الدخول</title>
+    <style>
+    html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* منع التمرير الأفقي */
+}
+        /* تنسيق الحاوية */
+        body {
+            background: url('av.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            height: 100vh;
+            animation: fadeIn 0.8s ease-in-out;
+                      
+        }
+                     body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* طبقة مظلمة بنسبة 30% */
+    z-index: -1; /* تأكد من أن الطبقة المظلمة تكون أسفل المحتوى */
+}
+        .container {
+            border: solid 1px #8d8d8d;
+            padding: 20px;
+            border-radius: 20px;
+            background-color: #fff;
+            max-width: 350px;
+            width: 150%; /* يجعل التصميم مرنًا على الشاشات الصغيرة */
+            margin: 50px auto; /* يجعل النموذج في المنتصف ويضيف مسافة جانبية */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: popIn 0.6s ease-in-out;
+        }
+
+        .container .heading {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-weight: bolder;
+        }
+
+        /* تنسيق النموذج */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 10px; /* إضافة مسافة داخلية على الجوانب */
+        }
+
+        .form .btn-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* زر الإرسال */
+        .form .btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-radius: 10px;
+            border: solid 1px green;
+            background: linear-gradient(135deg, #004d00, #00b300);
+            color: #fff;
+            font-weight: bolder;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            box-shadow: 0px 2px 3px green, 
+                       
+        }
+
+        .form .btn:active {
+            box-shadow: inset 0px 4px 5px #0070f0, inset 0px -4px 5px #002cbb;
+            transform: scale(0.98);
+        }
+
+        .form .btn:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* حقول الإدخال */
+        .input-field {
+            position: relative;
+            text-align: left;
+            opacity: 0; /* لجعل الحقول غير مرئية في البداية */
+            transform: translateY(20px); /* لجعل الحقول تبدأ من أسفل */
+            animation: fadeInFields 0.6s ease-in-out forwards; /* تأثير ظهور الحقول */
+        }
+
+        .input-field:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .input-field:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .input-field:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        /* تنسيق حقل الإدخال */
+        .input-field input {
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: solid 1px #8d8d8d;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* تنسيق الـ label */
+        .input-field label {
+            position: absolute;
+            color: #8d8d8d;
+            pointer-events: none;
+            background-color: transparent;
+            left: 15px;
+            transform: translateY(0.6rem);
+            transition: all 0.3s ease;
+        }
+
+        .input-field input:focus,
+        .input-field input:valid {
+            outline: none;
+            border: solid 1px black;
+        }
+
+        .input-field input:focus ~ label,
+        .input-field input:valid ~ label {
+            transform: translateY(-51%) translateX(-10px) scale(0.8);
+            background-color: white;
+            padding: 0px 5px;
+            color: black;
+            
+            letter-spacing: 1px;
+            border-radius: 100px;
+        }
+
+        .acc-text {
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .acc-text span {
+            color: green;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* تأثيرات الأنيميشن */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* تأثير الحقول عند التفاعل */
+        @keyframes fadeInFields {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* تأثير انقضاء الصفحة */
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+             <h1>صدهّ</h1><br>
+        <div class="heading">تسجيل الدخول إلى حسابك</div>
+        <!-- Add an ID here -->
+        <form id="loginForm" class="form" action="#">
+            <div class="input-field">
+                <input required type="text" name="username" id="username" autocomplete="off" pattern="^[a-zA-Z0-9_]+$" title="اسم المستخدم يجب أن يحتوي على أحرف وأرقام فقط بدون مسافات" minlength="4" maxlength="20">
+                <label for="username">اسم المستخدم</label>
+            </div>
+            <div class="input-field">
+                <input required type="email" name="email" id="email" autocomplete="off">
+                <label for="email">البريد الإلكتروني</label>
+            </div>
+            <div class="input-field">
+                <input required type="password" name="password" id="password" autocomplete="off" minlength="6" title="يجب أن تكون كلمة المرور 6 أحرف على الأقل">
+                <label for="password">كلمة المرور</label>
+            </div>
+
+            <div class="btn-container">
+                <button type="submit" class="btn">إرسال</button>
+            </div>
+
+            <div class="acc-text">
+                جديد هنا؟ <a href="signin.html"><span>إنشاء حساب</span></br>
+                             <a href="forgot-password.html" class="text-decoration-none text-primary"><span>هل نسيت كلمة السر؟</span></a>
+
+        </form>
+    </div>
+
+<script>
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent form submission
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const resultDiv = document.getElementById('result');
+    
+
+    // Clear any previous error messages
+    // resultDiv.innerHTML = '';
+
+    // Basic validation before sending request
+    if (!username || !password) {
+        resultDiv.innerHTML = 'يرجى إدخال اسم المستخدم وكلمة المرور';
+        resultDiv.style.color = 'red';
+        return;
+    }
+	
+    // Construct API URL
+    const loginUrl = `http://157.173.218.37:9080/login?username=${username}&password=${password}`;
+
+	console.log('Sending request to:',loginUrl);
+
+    // Send the data to the API using fetch
+    fetch(loginUrl, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        console.log('Response Status:', response.status); // Log the response status
+        if (!response.ok) {
+            throw new Error("فشل في الاتصال بالخادم.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response Data:', data); // Log the response data
+        if (data.token) {
+            // Successful login
+            console.log("تم تسجيل الدخول بنجاح:", data);
+            localStorage.setItem("authToken", data.token);  // Store the token in localStorage
+            alert("تم تسجيل الدخول بنجاح! سيتم تحويلك إلى صفحة الدردشة.");
+            window.location.href = "chat.html"; // Redirect to chat page
+        } else {
+            // Login failed
+            resultDiv.innerHTML = 'اسم المستخدم أو كلمة المرور غير صحيحة. حاول مرة أخرى.';
+            resultDiv.style.color = 'red';
+        }
+    })
+    .catch(error => {
+        console.error("حدث خطأ أثناء تسجيل الدخول:", error);
+        resultDiv.innerHTML = 'حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.';
+        resultDiv.style.color = 'red';
+    });
+});
+</script>
+</body>
+</html>

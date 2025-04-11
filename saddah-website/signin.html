@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج تسجيل جديد</title>
+    <style>
+    html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* منع التمرير الأفقي */
+}
+        body {
+            background: url('av.png') no-repeat center center fixed;
+            background-size: cover;
+            background-attachment: fixed; 
+            margin: 0;
+            height: 100vh;
+            animation: fadeIn 0.8s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+                   body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* طبقة مظلمة بنسبة 30% */
+    z-index: -1; /* تأكد من أن الطبقة المظلمة تكون أسفل المحتوى */
+}
+.container .heading {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-weight: bolder;
+        }
+        .container {
+            border: solid 1px #8d8d8d;
+            padding: 30px;
+            border-radius: 20px;
+            background-color: #fff;
+            max-width: 350px;
+            width: 100%;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: popIn 0.6s ease-in-out;
+            transform-origin: center;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 0 10px;
+        }
+
+        .input-field {
+            position: relative;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .input-field input {
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: solid 1px #8d8d8d;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .input-field label {
+            position: absolute;
+            color: #8d8d8d;
+            pointer-events: none;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: all 0.3s ease;
+        }
+
+        .input-field input:focus ~ label,
+        .input-field input:not(:placeholder-shown) ~ label {
+            top: 5px;
+            left: 10px;
+            font-size: 0.85rem;
+            background-color: white;
+            padding: 2px 5px;
+            color: black;
+           
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-radius: 10px;
+            border: solid 1px #1034aa;
+            background: linear-gradient(135deg, #004d00, #00b300);
+            color: #fff;
+            font-weight: bolder;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            box-shadow: 0px 2px 3px #000d3848;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .acc-text {
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .acc-text span {
+            color: green;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+            <h1>صدهّ</h1></br>
+        <div class="heading">تسجيل جديد</div></br>
+        <form class="form" action="#" onsubmit="redirectToSignin(event)">
+            <div class="input-field"><input required type="text" name="full_name" placeholder=" "><label>الاسم الكامل</label></div>
+            <div class="input-field"><input required type="text" name="username" placeholder=" " autocomplete="off" pattern="^[a-zA-Z0-9_]+$" title="اسم المستخدم يجب أن يحتوي على أحرف وأرقام فقط بدون مسافات" minlength="4" maxlength="20"><label>اسم المستخدم</label></div>
+            <div class="input-field"><input required type="email" name="email" placeholder=" "><label>البريد الإلكتروني</label></div>
+            <div class="input-field"><input required type="tel" name="phone" placeholder=" "><label>رقم الجوال</label></div>
+            <div class="input-field"><input required type="password" name="password" placeholder=" " autocomplete="off" minlength="6" title="يجب أن تكون كلمة المرور 6 أحرف على الأقل"><label>كلمة المرور</label></div>
+            <div class="input-field"><input required type="password" name="confirm_password" placeholder=" " autocomplete="off" minlength="6" title="يجب ان تكون كلمه المرور متطابقه"><label>إعادة كلمة المرور</label></div>
+            <button type="submit" class="btn">إرسال</button>
+            <div class="acc-text">لديك حساب بالفعل؟ <a href="footo.html"><span>تسجيل الدخول</span></a></div>
+        </form>
+    </div>
+
+    <script>
+             function registerUser(event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
+
+            // جلب بيانات النموذج
+            const fullName = document.querySelector("input[name='full_name']").value;
+            const username = document.querySelector("input[name='username']").value;
+            const email = document.querySelector("input[name='email']").value;
+            const phone = document.querySelector("input[name='phone']").value;
+            const password = document.querySelector("input[name='password']").value;
+            const confirmPassword = document.querySelector("input[name='confirm_password']").value;
+
+            // التحقق من تطابق كلمة المرور
+            if (password !== confirmPassword) {
+                alert("كلمتا المرور غير متطابقتين!");
+                return;
+            }
+
+            // تجهيز البيانات لإرسالها إلى API
+            const userData = {
+                uuid: crypto.randomUUID(), // توليد UUID عشوائي
+                username: username,
+                password: password,
+                email: email,
+                phone: phone,
+                fullname: fullName
+            };
+
+            // إرسال البيانات إلى API باستخدام fetch
+            fetch("http://157.173.218.37:5500/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(userData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("فشل في تسجيل الحساب، الرجاء المحاولة مرة أخرى.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("تم التسجيل بنجاح:", data);
+                alert("تم إنشاء الحساب بنجاح! سيتم تحويلك إلى صفحة تسجيل الدخول.");
+                window.location.href = "footo.html"; // تحويل المستخدم إلى صفحة تسجيل الدخول
+            })
+            .catch(error => {
+                console.error("حدث خطأ أثناء التسجيل:", error);
+                alert(error.message || "حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.");
+            });
+        }
+        function redirectToSignin(event) {
+            event.preventDefault();
+            alert("تم إنشاء الحساب بنجاح! سيتم تحويلك إلى صفحة تسجيل الدخول.");
+            window.location.href = "footo.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const fields = document.querySelectorAll(".input-field");
+            fields.forEach((field, index) => {
+                setTimeout(() => {
+                    field.style.transform = "translateY(0)";
+                    field.style.opacity = "1";
+                }, index * 100);
+            });
+        });
+
+    </script>
+</body>
+</html>

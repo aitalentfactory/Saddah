@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المحادثة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    .back-btn {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 10px 15px;
+        background: #AEBFA9;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .back-btn:hover {
+        background: #0056b3;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: #f3f7f3;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
+    }
+
+    .footer {
+        background-color: white;
+        color: darkgreen;
+        text-align: center;
+        padding: 10px 0;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        font-size: 0.9rem;
+    }
+
+    .chat-container {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        height: 80vh;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-box {
+        flex-grow: 1;
+        overflow-y: auto;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .message {
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 10px;
+        max-width: 80%;
+    }
+
+    .message.sent {
+        background: #007bff;
+        color: white;
+        align-self: flex-end;
+    }
+
+    .message.received {
+        background: #e9ecef;
+        align-self: flex-start;
+    }
+
+    .input-container {
+        display: flex;
+        margin-top: 10px;
+    }
+
+    .input-container textarea {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid green;
+        border-radius: 5px;
+        font-family: inherit;
+        font-size: 1rem;
+        line-height: 1.5;
+        overflow-y: hidden;
+        resize: none;
+    }
+
+    .input-container button {
+        margin-left: 10px;
+        padding: 10px 15px;
+        border: none;
+        background: green;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+	
+    <div class="chat-container">
+        <h3>AI المحادثة مع صدهّ</h3>
+        <div class="chat-box" id="chat-box">
+            <div class="message received">مرحبًا معك صدهّ ! كيف يمكنني مساعدتك؟</div>
+        </div>
+        <div class="input-container">
+            <textarea id="message-input" placeholder="اكتب رسالتك..." rows="1"></textarea>
+            <button onclick="sendMessage()">إرسال</button>
+            <button onclick="goBack()" class="back-btn">رجوع</button>
+        </div>
+        <div id="loading" style="display: none; color: green; margin-top: 10px;">
+            ⏳ جارٍ المعالجة...
+        </div>	
+    </div>
+
+    <div class="footer">
+        <p>© 2025 صدهّ , جميع الحقوق محفوظة</p>
+    </div>
+
+    <script>
+    function sendMessage() {
+        let input = document.getElementById("message-input");
+        let messageText = input.value.trim();
+        if (messageText === "") return;
+
+        let chatBox = document.getElementById("chat-box");
+
+        // Show user message
+        let userMessage = document.createElement("div");
+        userMessage.classList.add("message", "sent");
+        userMessage.innerText = messageText;
+        chatBox.appendChild(userMessage);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Clear input
+        input.value = "";
+        input.style.height = "auto"; // Reset height after sending
+
+        // Show loading
+        document.getElementById("loading").style.display = "block";
+
+        // Send message to backend API
+        fetch("http://157.173.218.37:9080/coach", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message: messageText })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("loading").style.display = "none";
+
+            let botMessage = document.createElement("div");
+            botMessage.classList.add("message", "received");
+
+            if (data.response && data.response !== "") {
+                botMessage.innerText = data.response;
+            } else {
+                botMessage.innerText = "لم يتم العثور على استجابة صالحة.";
+            }
+
+            chatBox.appendChild(botMessage);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        })
+        .catch(error => {
+            document.getElementById("loading").style.display = "none";
+
+            let errorMessage = document.createElement("div");
+            errorMessage.classList.add("message", "received");
+            errorMessage.innerText = "حدث خطأ أثناء الاتصال بالخادم.";
+            chatBox.appendChild(errorMessage);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            console.error("API Error:", error);
+        });
+    }
+
+    function goBack() {
+        window.location.href = "main.html";
+    }
+
+    // Auto-expand textarea
+    const textarea = document.getElementById("message-input");
+    textarea.addEventListener("input", function () {
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
+    });
+
+    // إرسال عند الضغط على Enter بدون شيفت
+    textarea.addEventListener("keypress", function(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault(); // لمنع النزول لسطر جديد
+            sendMessage();
+        }
+    });
+    </script>
+
+</body>
+</html>

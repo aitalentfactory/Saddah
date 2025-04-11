@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- استدعاء ملف CSS -->
+    <link rel="stylesheet" href="animation.css">
+    <!-- استدعاء ملف JavaScript -->
+    <script src="animation.js"></script>
+
+    <style>
+html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* منع التمرير الأفقي */
+        }
+.footer {
+            background-color: white;
+            color: darkgreen;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            font-size: 0.9rem;
+        }
+.settings-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    z-index: 1000;
+}
+
+.settings-content {
+    text-align: center;
+}
+
+.settings-content label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.settings-content input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.settings-content button {
+    margin-top: 15px;
+    background: green;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.settings-content button:hover {
+    background: darkgreen;
+}
+
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+               .profile-container {
+    position: absolute;
+    top: 10px; /* تحديد المسافة من الأعلى */
+    right: 10px; /* تحديد المسافة من اليمين */
+}
+
+.profile-btn img {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    border: 2px solid #004d00;
+}
+
+.profile-menu {
+    display: none;
+    position: absolute;
+    top: 60px; /* المسافة من الصورة الشخصية */
+    right: 0; /* تحديد المسافة من اليمين */
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    min-width: 200px;
+    text-align: left; /* جعل النص داخل القائمة إلى اليسار */
+    z-index: 1000;
+}
+
+.profile-menu .profile-pic {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.profile-menu .profile-pic img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #00b300;
+}
+
+.profile-menu p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.profile-menu hr {
+    margin: 8px 0;
+    border: 0;
+    height: 1px;
+    background: #ddd;
+}
+
+.profile-menu a {
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+.profile-menu a:hover {
+    background: #f2f2f2;
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+             background: #f3f7f3;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+        }
+
+        .sidebar {
+            width: 180px; /* تقليص عرض الشريط الجانبي */
+            background: white;
+            height: 100vh;
+            padding-top: 50px;
+            border-right: 1px solid green;
+            position: fixed;
+            box-shadow: 4px 0px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            color: black;
+            font-size: 18px;
+        }
+
+        .nav-link {
+            color: black;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px; /* تقليص حجم النص */
+        }
+
+        .nav-link.active { 
+  background: none; /* إزالة اللون الثابت */
+    color: black; /* تأكيد أن النص يبقى باللون الأسود */
+}
+              .nav-link:hover {
+            background: #E9F4E6;
+            color: black;
+            border-radius: 5px;
+        }
+
+        .content {
+            margin-left: 200px; /* تقليص المسافة بين المحتوى والشريط الجانبي */
+            width: calc(100% - 200px);
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+          .back-btn:hover {
+        background: #0056b3;
+    }
+
+        .back-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 8px 8px; /* تصغير حجم الزر */
+            background: #AEBFA9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+        }
+
+        .fade-in {
+            opacity: 1;
+        }
+
+        /* تحسين الجدول ليكون أصغر وأكثر تناسقًا */
+        .table-sm th, .table-sm td {
+            padding: 6px 10px; /* تصغير المسافات داخل الجدول */
+        }
+
+        /* تحسين تنسيق الجدول */
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        table td {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+            <!-- القائمة الشخصية -->
+<div class="profile-container">
+    <button class="profile-btn" onclick="toggleProfileMenu()">
+        <span id="profileName">أحمد</span>
+    </button>
+    <div class="profile-menu" id="profileMenu">
+        <div class="profile-pic">
+            
+        </div>
+        <p><strong>الاسم:</strong> <span id="profileName">أحمد</span></p>
+        <p><strong>اسم المستخدم:</strong> <span id="profileUsername">ahmed123</span></p>
+        <p><strong>البريد الإلكتروني:</strong> <span id="profileEmail">ahmed@example.com</span></p>
+        <p><strong>رقم الجوال:</strong> <span id="profilePhone">+966123456789</span></p>
+        <hr>
+        <a href="#" onclick="openSettings()">الإعدادات</a>
+        <a href="signin.html">تسجيل الخروج</a>
+    </div>
+</div>
+<!-- نافذة الإعدادات -->
+<div id="settingsModal" class="settings-modal">
+    <div class="settings-content">
+        <span class="close-btn" onclick="closeSettings()">&times;</span>
+        <h3>إعدادات الحساب</h3>
+        <label>الاسم:</label>
+        <input type="text" id="editName" value="أحمد">
+        <label>اسم المستخدم:</label>
+        <input type="text" id="editUsername" value="ahmed123">
+        <label>البريد الإلكتروني:</label>
+        <input type="email" id="editEmail" value="ahmed@example.com">
+        <label>رقم الجوال:</label>
+        <input type="text" id="editPhone" value="+966123456789">
+        <button onclick="saveChanges()">حفظ التغييرات</button>
+    </div>
+</div>
+
+
+    <div class="d-flex">
+        <!-- الشريط الجانبي -->
+        <nav class="sidebar">
+            <h2 class="p-3">صدهّ</h2>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a href="chat.html" class="nav-link">المحادثة</a></li>
+                <li class="nav-item"><a href="#" class="nav-link active" onclick="showPlayerDetails(0)">Player A</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" onclick="showPlayerDetails(1)">Player B</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" onclick="showPlayerDetails(2)">Player C</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" onclick="showPlayerDetails(3)">Player D</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" onclick="showPlayerDetails(4)">Player E</a></li>
+            </ul>
+            <hr>
+        </nav>
+
+        <!-- المحتوى الرئيسي -->
+        <div class="content p-4 fade-in">
+            <button class="back-btn" onclick="window.location.href='footo.html'">رجوع</button>
+
+            <h3 id="player-name">Player A</h3>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Date of birth</th>
+                            <th>Occupation</th>
+                            <th>Role</th>
+                            <th>Import</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- سيتم تعبئة البيانات بواسطة JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<div class="footer">
+        <p>© 2025 صدهّ , جميع الحقوق محفوظة</p>
+    </div>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    // تحميل البيانات من localStorage
+    if (localStorage.getItem("profileName")) {
+        document.getElementById("profileName").textContent = localStorage.getItem("profileName");
+        document.getElementById("profileUsername").textContent = localStorage.getItem("profileUsername");
+        document.getElementById("profileEmail").textContent = localStorage.getItem("profileEmail");
+        document.getElementById("profilePhone").textContent = localStorage.getItem("profilePhone");
+    }
+
+    const tableBody = document.getElementById("table-body");
+
+    // بيانات اللاعبين
+    const players = [
+        { first: "Eula", last: "Lane", email: "eula.lane@jgrormo.ye", phone: "(762) 526-5961", dob: "1951-06-07", job: "Museum Curator", role: "Manager" },
+        { first: "Barry", last: "Rodriquez", email: "barry.rodriquez@zun.mm", phone: "(267) 955-5124", dob: "2010-06-07", job: "Aviation Maintenance Instructor", role: "Worker" },
+        { first: "Eugenia", last: "Selvi", email: "eugenia.selvi@capfad.vn", phone: "(680) 368-2192", dob: "1970-05-23", job: "HR Clerk", role: "Manager" },
+        { first: "Alejandro", last: "Miles", email: "alejandro.miles@dec.bn", phone: "(281) 301-2039", dob: "2010-07-10", job: "Aviation Maintenance Instructor", role: "Worker" },
+        { first: "Cora", last: "Tesi", email: "cora.tesi@bivo.yt", phone: "(600) 616-7955", dob: "1968-09-06", job: "Healthcare Social Worker", role: "Manager" },
+    ];
+
+    // عرض تفاصيل اللاعب عند النقر على اسمه
+    window.showPlayerDetails = function (index) {
+        const player = players[index];
+        document.getElementById("player-name").textContent = `${player.first} ${player.last}`;
+
+        // تحديث بيانات الجدول
+        tableBody.innerHTML = `
+            <tr>
+                <td>${player.first}</td>
+                <td>${player.last}</td>
+                <td>${player.email}</td>
+                <td>${player.phone}</td>
+                <td>${player.dob}</td>
+                <td>${player.job}</td>
+                <td>${player.role}</td>
+                <td>---</td>
+            </tr>
+        `;
+    };
+
+    // عرض تفاصيل اللاعب الأول بشكل افتراضي
+    showPlayerDetails(0);
+});
+function saveChanges() {
+    // حفظ البيانات في localStorage
+    localStorage.setItem("profileName", document.getElementById("editName").value);
+    localStorage.setItem("profileUsername", document.getElementById("editUsername").value);
+    localStorage.setItem("profileEmail", document.getElementById("editEmail").value);
+    localStorage.setItem("profilePhone", document.getElementById("editPhone").value);
+
+    // تحديث العرض
+    document.getElementById("profileName").textContent = document.getElementById("editName").value;
+    document.getElementById("profileUsername").textContent = document.getElementById("editUsername").value;
+    document.getElementById("profileEmail").textContent = document.getElementById("editEmail").value;
+    document.getElementById("profilePhone").textContent = document.getElementById("editPhone").value;
+
+    closeSettings(); // إغلاق النافذة بعد الحفظ
+}
+
+          function openSettings() {
+    document.getElementById("settingsModal").style.display = "block";
+}
+
+function closeSettings() {
+    document.getElementById("settingsModal").style.display = "none";
+}
+
+function saveChanges() {
+    document.getElementById("profileName").textContent = document.getElementById("editName").value;
+    document.getElementById("profileUsername").textContent = document.getElementById("editUsername").value;
+    document.getElementById("profileEmail").textContent = document.getElementById("editEmail").value;
+    document.getElementById("profilePhone").textContent = document.getElementById("editPhone").value;
+
+    closeSettings(); // إغلاق النافذة بعد الحفظ
+}
+
+ function toggleProfileMenu() {
+        var menu = document.getElementById("profileMenu");
+        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    // إغلاق القائمة عند النقر خارجها
+    document.addEventListener("click", function(event) {
+        var profileContainer = document.querySelector(".profile-container");
+        if (!profileContainer.contains(event.target)) {
+            document.getElementById("profileMenu").style.display = "none";
+        }
+    });
+          
+
+    // تحديث البيانات (يمكنك استبدالها بقيم حقيقية من قاعدة البيانات)
+    document.getElementById("profileName").textContent = "أحمد";
+    document.getElementById("profileUsername").textContent = "ahmed123";
+    document.getElementById("profileEmail").textContent = "ahmed@example.com";
+    document.getElementById("profilePhone").textContent = "+966123456789";
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.body.classList.add("fade-in");
+
+            const tableBody = document.getElementById("table-body");
+
+            // بيانات اللاعبين
+            const players = [
+                { first: "Eula", last: "Lane", email: "eula.lane@jgrormo.ye", phone: "(762) 526-5961", dob: "1951-06-07", job: "Museum Curator", role: "Manager" },
+                { first: "Barry", last: "Rodriquez", email: "barry.rodriquez@zun.mm", phone: "(267) 955-5124", dob: "2010-06-07", job: "Aviation Maintenance Instructor", role: "Worker" },
+                { first: "Eugenia", last: "Selvi", email: "eugenia.selvi@capfad.vn", phone: "(680) 368-2192", dob: "1970-05-23", job: "HR Clerk", role: "Manager" },
+                { first: "Alejandro", last: "Miles", email: "alejandro.miles@dec.bn", phone: "(281) 301-2039", dob: "2010-07-10", job: "Aviation Maintenance Instructor", role: "Worker" },
+                { first: "Cora", last: "Tesi", email: "cora.tesi@bivo.yt", phone: "(600) 616-7955", dob: "1968-09-06", job: "Healthcare Social Worker", role: "Manager" },
+            ];
+
+            // عرض تفاصيل اللاعب عند النقر على اسمه
+            window.showPlayerDetails = function (index) {
+                const player = players[index];
+                document.getElementById("player-name").textContent = `${player.first} ${player.last}`;
+
+                // تحديث بيانات الجدول
+                tableBody.innerHTML = `
+                    <tr>
+                        <td>${player.first}</td>
+                        <td>${player.last}</td>
+                        <td>${player.email}</td>
+                        <td>${player.phone}</td>
+                        <td>${player.dob}</td>
+                        <td>${player.job}</td>
+                        <td>${player.role}</td>
+                        <td>---</td>
+                    </tr>
+                `;
+            };
+
+            // عرض تفاصيل اللاعب الأول بشكل افتراضي
+            showPlayerDetails(0);
+        });
+    </script>
+</body>
+</html>
