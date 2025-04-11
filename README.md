@@ -8,6 +8,7 @@ Integrates live data from IoT wearables for performance tracking
 
 
 Saddah Project -  AI-Powered Personalized Football Trainer for GoalKeepers
+--------------------------------------------------------------------------
 
 
 This repository brings together all components of the Saddah Project, an AI-powered football training and injury prediction platform. It includes datasets, machine learning pipelines, data analysis notebooks, and the complete application code.
