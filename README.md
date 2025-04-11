@@ -7,7 +7,8 @@ Uses RAG (Retrieval-Augmented Generation) to pull relevant training suggestions 
 Integrates live data from IoT wearables for performance tracking
 
 
-Saddah Project - AI Football Coach & Injury Insight - AI-Powered Personalized Football Trainer![image](https://github.com/user-attachments/assets/e48141f3-790a-4a5e-88c6-9768bc853701)
+Saddah Project - AI Football Coach & Injury Insight - AI-Powered Personalized Football Trainer
+(https://github.com/user-attachments/assets/e48141f3-790a-4a5e-88c6-9768bc853701)
 
 
 This repository brings together all components of the Saddah Project, an AI-powered football training and injury prediction platform. It includes datasets, machine learning pipelines, data analysis notebooks, and the complete application code.
@@ -18,15 +19,17 @@ This repository brings together all components of the Saddah Project, an AI-powe
 📁 1/ Github_Dataset:
 ======================
 
-Original  datasets downloaded from Github  https://github.com/josedv82/public_sport_science_datasets/tree/main
-![image]) Includes sports performance and injury
+Original  datasets downloaded from Github  Includes sports performance and injury
+https://github.com/josedv82/public_sport_science_datasets/tree/main
+
 
 📁 2/Kaggle_dataset:
 =====================
 
 Original datasets downloaded from Kaggle. The datasets provided include the players data for the Career Mode from FIFA 15 to FIFA 23.
-https://www.kaggle.com/datasets/joebeachcapital/fifa-players
-![image](https://github.com/user-attachments/assets/7f3d979c-e830-4bad-b57e-bbf1bea3ae4c)
+[https://www.kaggle.com/datasets/joebeachcapital/fifa-players](https://www.kaggle.com/datasets/joebeachcapital/fifa-players)
+
+
 
 
 📁 3/Saddah-main (Application Source Code):
