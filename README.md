@@ -55,7 +55,7 @@ Includes all code and scripts used to build and fine-tune the AI football traini
 
 Notebooks and Python scripts for:
 
-- Exploratory data analysis (EDA)
+- Exploratory data analysis (EDA) for Kaggle dataset
 - Preparing datasets for fine-tuning
 - Uploading data to OpenAI
 - Monitoring fine-tuning jobs
