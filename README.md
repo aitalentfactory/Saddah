@@ -7,8 +7,7 @@ Uses RAG (Retrieval-Augmented Generation) to pull relevant training suggestions 
 Integrates live data from IoT wearables for performance tracking
 
 
-Saddah Project - AI Football Coach & Injury Insight - AI-Powered Personalized Football Trainer
-(https://github.com/user-attachments/assets/e48141f3-790a-4a5e-88c6-9768bc853701)
+Saddah Project -  AI-Powered Personalized Football Trainer for GoalKeepers
 
 
 This repository brings together all components of the Saddah Project, an AI-powered football training and injury prediction platform. It includes datasets, machine learning pipelines, data analysis notebooks, and the complete application code.
@@ -70,7 +69,7 @@ A detailed notebook analyzing athlete injury data, covering:
 - Visualizations (correlation heatmaps, distributions, trends)
 - Comparisons between injured and non-injured athletes
 
-📦7/ Saddah_website.zip:
+📦7/ Saddah_website:
 ============================
 
 Contains the source code or compiled version of the official Saddah project website. This may include:
