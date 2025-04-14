@@ -4,7 +4,7 @@
 The system analyses player data (fitness levels, past injuries, performance stats). AI adjusts training schedules dynamically based on real-time insights.
 Players and coaches receive personalized training plans via an interactive dashboard. 
 Uses RAG (Retrieval-Augmented Generation) to pull relevant training suggestions from large datasets.
-Integrates live data from IoT wearables for performance tracking
+Integrates live data from IoT wearables for performance tracking.
 Coaches can rank  players based on their effort levels using customizable matrices.
 These matrices can be configured to prioritize biometric, physical, or health indicators as key performance markers
 
@@ -96,6 +96,9 @@ Contains the source code or compiled version of the official Saddah project webs
 - Injury risk detection based on multi-week performance data
 - Integrated app experience with AI feedback
 - Strong focus on real-world datasets and visual analytics
+- Coaches can rank  players based on their effort levels using customizable matrices,these matrices can be configured to prioritize biometric, physical, or health 
+  indicators as key performance markers
+
 
 
 
