@@ -5,6 +5,8 @@ The system analyses player data (fitness levels, past injuries, performance stat
 Players and coaches receive personalized training plans via an interactive dashboard. 
 Uses RAG (Retrieval-Augmented Generation) to pull relevant training suggestions from large datasets.
 Integrates live data from IoT wearables for performance tracking
+Coaches can rank  players based on their effort levels using customizable matrices.
+These matrices can be configured to prioritize biometric, physical, or health indicators as key performance markers
 
 
 Saddah Project -  AI-Powered Personalized Football Trainer for GoalKeepers
