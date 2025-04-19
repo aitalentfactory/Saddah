@@ -341,3 +341,32 @@ def prompt_translation(question: str):
             Question: "{question}"
             """
     return prompt
+
+
+def generate_rank_prompt(users_data: dict) -> str:
+    """
+    Generates a prompt to instruct an LLM to analyze each player's metrics and trainings
+    in chronological order to assign a rank between 0 to 100 with two decimal places.
+    """
+
+    prompt = """
+You are an expert sports performance evaluator. Given player metrics and training history for a list of athletes, evaluate and assign a `rank` score between 0.00 and 100.00 for each player. 
+
+**Rules for Evaluation:**
+1. For each user:
+   - Sort `player_metrics` by `create_date_time` from oldest to newest.
+   - Sort `player_trainings` by `create_date_time` from oldest to newest.
+2. Evaluate overall performance based on:
+   - Progression over time in physical and physiological metrics.
+   - Frequency, variety, and intensity of trainings.
+   - Consider rest, recovery, and training consistency.
+3. Compare players collectively to rank them fairly.
+4. Final `rank` should be a floating number with **two decimal precision**, in the range of **0 to 100**, reflecting performance and improvement.
+
+Here is the player data in JSON format:
+"""
+
+    prompt += "\n\n" + json.dumps(users_data, indent=2)
+    prompt += "\n\nPlease return the same JSON with the `rank` field for each player filled based on the analysis."
+
+    return prompt

@@ -6,3 +6,4 @@ class UserDTO:
     uuid: str = None
     phone: str = None
     status: str = None
+    rank: float = 0.0

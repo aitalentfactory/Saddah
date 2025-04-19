@@ -1,8 +1,10 @@
 import json
+from datetime import datetime
 from typing import List
 
 from src.dto.TrainingDTO import TrainingDTO
 from src.model.Training import Training
+from src.responseDTO.TraningResponseDTO import TrainingResponseDTO
 
 
 def training_to_trainingDTO(training:Training) -> TrainingDTO:
@@ -23,6 +25,26 @@ def trainingDTO_to_training(trainingDTO:TrainingDTO) -> Training:
     training.create_date_time = trainingDTO.create_date_time
     return training
 
+def trainingDTO_to_trainingResponseDTO(trainingDTO: TrainingDTO) -> TrainingResponseDTO:
+    trainingResponseDTO = TrainingResponseDTO()
+    trainingResponseDTO.training = trainingDTO.training
+    trainingResponseDTO.uuid = trainingDTO.uuid
+    trainingResponseDTO.user_uuid = trainingDTO.user_uuid
+    print("create_date_time type:", type(trainingDTO.create_date_time))
+    # Handle datetime conversion safely
+    if isinstance(trainingDTO.create_date_time, str):
+        trainingResponseDTO.create_date_time = trainingDTO.create_date_time
+    else:
+        trainingResponseDTO.create_date_time = ""
+
+    return trainingResponseDTO
+
+def trainingDTOs_to_trainingResponseDTOs(trainingDTOs:List[TrainingDTO]) -> List[TrainingResponseDTO]:
+    trainingResponseDTOs = []
+    for trainingDTO in trainingDTOs:
+        trainingResponseDTO = trainingDTO_to_trainingResponseDTO(trainingDTO)
+        trainingResponseDTOs.append(trainingResponseDTO)
+    return trainingResponseDTOs
 
 def trainingDTOs_to_trainings(trainingDTOs:List[TrainingDTO]) -> List[Training]:
     trainings = []

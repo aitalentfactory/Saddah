@@ -30,13 +30,36 @@ class TrainingRepository:
             return result.lastrowid
 
 
-        def get_latest_10_training_by_user_uuid(self, user_uuid):
+        def get_latest_training_by_user_uuid(self, user_uuid):
             query = text("""
              SELECT id, status, user_uuid, uuid, training,create_date_time
              FROM player_training 
              WHERE user_uuid = :user_uuid 
              ORDER BY create_date_time DESC 
-             LIMIT 1
+             LIMIT 3
+         """)
+            results = self.db.execute(query, {"user_uuid": user_uuid}).fetchall()
+
+            trainings = []
+            for result in results:
+                training = Training()
+                training.id = result.id
+                training.status = result.status
+                training.user_uuid = result.user_uuid
+                training.uuid = result.uuid
+                training.create_date_time = result.create_date_time
+                training.training = result.training
+                trainings.append(training)
+            return trainings
+
+
+        def get_latest_3_training_by_user_uuid(self, user_uuid):
+            query = text("""
+             SELECT id, status, user_uuid, uuid, training,create_date_time
+             FROM player_training 
+             WHERE user_uuid = :user_uuid 
+             ORDER BY create_date_time DESC 
+             LIMIT 3
          """)
             results = self.db.execute(query, {"user_uuid": user_uuid}).fetchall()
 

@@ -1,3 +1,5 @@
+import urllib
+
 from langchain_community.utilities import SQLDatabase
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -14,10 +16,10 @@ DB_PASSWORD = os.getenv("PY_DB_PASSWORD")
 DB_HOST = os.getenv("PY_DB_HOST")
 DB_PORT = os.getenv("PY_DB_PORT")
 DB_NAME = os.getenv("PY_DB_NAME")
-
+#encoded_password = urllib.parse.quote_plus(DB_PASSWORD)
 # Construct the DATABASE_URL
-DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-
+DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+#DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 engine = create_engine(
     DATABASE_URL,
     pool_size=20,  # The size of the pool to be maintained

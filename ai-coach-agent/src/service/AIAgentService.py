@@ -1,21 +1,27 @@
+import json
 
 from langchain_core.messages import HumanMessage
 from langgraph.graph import StateGraph, START, END
 from sqlalchemy.orm import Session
 
 from src.dto.TrainingDTO import TrainingDTO
-from src.service.PromptService import generate_report_prompt,generate_training_prompt, generate_prompt_routh, \
-    extract_name, prompt_translation
+from src.dto.UserWrapperDTO import UserWrapperDTO
+from src.mapper.UserMapper import userWrapperDTO_to_dict, userDTOs_to_users, users_to_userResponseDTOs
+from src.service.PromptService import generate_report_prompt, generate_training_prompt, generate_prompt_routh, \
+    extract_name, prompt_translation, generate_rank_prompt
 from src.service.PlayerMetricService import PlayerMetricService
 from src.service.TrainingService import TrainingService
 from src.service.UserService import UserService
+from src.util.CommonUtil import get_score
+
 
 class AIAgentService:
-    def __init__(self,llm_model,db: Session):
+    def __init__(self,llm_trained_model,llm_rank_model,db: Session):
         self.userService = UserService(db)
         self.playerMetricService = PlayerMetricService(db)
         self.trainingService = TrainingService(db)
-        self.llm_model = llm_model
+        self.llm_trained_model = llm_trained_model
+        self.llm_rank_model = llm_rank_model
 
         workflow = StateGraph(dict)
         workflow.add_node("translation", self.translation_node)
@@ -44,9 +50,7 @@ class AIAgentService:
         workflow.add_edge("trainer_agent", END)  # Explicit edge to END
         workflow.add_edge("ai_agent", END)  # Explicit edge to END
 
-
         workflow.set_entry_point("translation")
-
 
         self.compiled_graph = workflow.compile()
 
@@ -67,12 +71,14 @@ class AIAgentService:
         gptMode = new_state.get("gpt_mode", "").strip()
 
         prompt = generate_prompt_routh(question)
-        answer = self.llm_generate(prompt)
+        answer = self.llm_trained_generate(prompt)
 
         print(f"inside supervisor_node gptMode: {answer}")
 
         if answer == 'KB':
             new_state["last_routed"] = "report_agent"
+        elif answer == 'RK':
+            new_state["last_routed"] = "rank_agent"
         else:
             new_state["last_routed"] = "ai_agent"
 
@@ -87,14 +93,14 @@ class AIAgentService:
         try:
             # Generate answer
             prompt = extract_name(question)
-            name = self.llm_generate(prompt)
+            name = self.llm_trained_generate(prompt)
             print(f"inside report_agent_node name: {name}")
             userDTO = self.userService.get_user_by_name(name)
             playerMetricDTOs = self.playerMetricService.get_latest_10_player_metrics_by_user_uuid(userDTO.uuid)
             playerMetricsJson = self.playerMetricService.convert_player_list_metric_to_json(playerMetricDTOs)
 
             prompt = generate_report_prompt(playerMetricsJson)
-            answer = self.llm_generate(prompt)
+            answer = self.llm_trained_generate(prompt)
             #print(f"[Report Agent] Generated answer: {answer}")
 
             state.update({"user_uuid": userDTO.uuid, "report_result": answer,"player_name": name})
@@ -112,11 +118,11 @@ class AIAgentService:
         user_uuid = state.get("user_uuid")
         try:
             # Generate answer
-            trainingDTOs = self.trainingService.get_last_10_training_by_userUuid(user_uuid)
+            trainingDTOs = self.trainingService.get_latest_training_by_userUuid(user_uuid)
             trainingDTOJson = self.trainingService.convert_trainingDTO_list_to_json(trainingDTOs)
 
             prompt = generate_training_prompt(trainingDTOJson,report,question)
-            answer = self.llm_generate(prompt)
+            answer = self.llm_trained_generate(prompt)
 
             trainingDTO = TrainingDTO()
             trainingDTO.training = answer
@@ -143,7 +149,7 @@ class AIAgentService:
             prompt = f"""
             You are a helpful AI assistant. Answer the following question: {question}
             """
-            answer = self.llm_generate(prompt)
+            answer = self.llm_trained_generate(prompt)
             print(f"[AI Agent] Generated answer: {answer}")
 
             state.update({"final_answer": answer})
@@ -159,7 +165,7 @@ class AIAgentService:
 
         try:
             prompt = prompt_translation(question)
-            translated = self.llm_generate(prompt)
+            translated = self.llm_trained_generate(prompt)
             print(f"[Translation Node] Translated Question: {translated}")
             state["question"] = question
         except Exception as e:
@@ -168,16 +174,63 @@ class AIAgentService:
 
         return state
 
-    def llm_generate(self, prompt: str) -> str:
+    def llm_trained_generate(self, prompt: str) -> str:
         """Function to send requests to OpenAI's GPT model."""
 
         # Prepare the message list with a single human message
         messages = [HumanMessage(content=prompt)]
 
         # Invoke the model with the structured message format
-        response = self.llm_model.invoke(messages)
+        response = self.llm_trained_model.invoke(messages)
+
+        # Return the response as a string
+        return response.content
+
+    def llm_rank_generate(self, prompt: str) -> str:
+        """Function to send requests to OpenAI's GPT model."""
+
+        # Prepare the message list with a single human message
+        messages = [HumanMessage(content=prompt)]
+
+        # Invoke the model with the structured message format
+        response = self.llm_rank_model.invoke(messages)
 
         # Return the response as a string
         return response.content
 
 
+    def get_users_with_score_evaluation(self):
+        userDTOs = self.userService.get_users_dtos()
+
+        userWrapperDTOs = []
+        for user in userDTOs:
+            userWrapperDTO = UserWrapperDTO()
+            userWrapperDTO.user = user
+            userWrapperDTO.playerMetrics = self.playerMetricService.get_latest_3_player_metrics_by_user_uuid(user.uuid)
+            userWrapperDTO.trainings = self.trainingService.get_latest_3_training_by_userUuid(user.uuid)
+            userWrapperDTOs.append(userWrapperDTO)
+
+
+        jsonDict = userWrapperDTO_to_dict(userWrapperDTOs)
+
+        prompt = generate_rank_prompt(jsonDict)
+        response = self.llm_rank_generate(prompt)
+
+        users = userDTOs_to_users(userDTOs)
+        userResponseDTOs = users_to_userResponseDTOs(users)
+        userResponseDTOs = self.score_users(userResponseDTOs,response)
+        return userResponseDTOs
+
+    def score_users(self, userResponseDTOs, aiResponse):
+        # Create a map from user_uuid to rank from the AI response (dict-based)
+        aiResponseDict = json.loads(aiResponse)
+        uuid_to_rank = {user["uuid"]: user["rank"] for user in aiResponseDict["users"]}
+
+        # Map rank to each userResponseDTO by uuid
+        for userResponseDTO in userResponseDTOs:
+            if userResponseDTO.uuid in uuid_to_rank:
+                userResponseDTO.rank = uuid_to_rank[userResponseDTO.uuid]
+            else:
+                userResponseDTO.rank = None  # Or a default/fallback rank
+
+        return userResponseDTOs

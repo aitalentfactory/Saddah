@@ -1,8 +1,12 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
-from src.configuration.Dependencies import get_ai_agent_service
+from src.configuration.Dependencies import get_ai_agent_service, get_user_service
 from src.requestDTO.AgentStateRequestDTO import AgentStateRequestDTO
 from src.responseDTO.AgentResponseDTO import AgentResponseDTO
+from src.responseDTO.UserResponseDTO import UserResponseDTO
 from src.service.AIAgentService import AIAgentService
+from src.service.UserService import UserService
 
 aiCoach = APIRouter()
 
@@ -34,3 +38,10 @@ async def coach(agentStateRequestDTO: AgentStateRequestDTO,
         agentResponseDTO.playerReport = result.get("report_result")
         agentResponseDTO.playerName = result.get("player_name")
         return agentResponseDTO
+
+
+@aiCoach.get("/players_evaluation", response_model=List[UserResponseDTO] ,tags=["Get All Players Evaluations"])
+async def players_evaluation(aiAgentService: AIAgentService = Depends(get_ai_agent_service) # Use the singleton
+                        ) -> List[UserResponseDTO]:
+
+    return aiAgentService.get_users_with_score_evaluation()
