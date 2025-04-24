@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تقييمات اللاعبين</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f7f3;
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      padding: 8px 8px;
+      background: #AEBFA9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    h2 {
+      text-align: center;
+      color: darkgreen;
+    }
+
+    .loading {
+      text-align: center;
+      margin: 20px 0;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background-color: #AEBFA9;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="back-btn" onclick="window.location.href='main.html'">⬅️ رجوع</button>
+
+  <h2>تقييمات اللاعبين</h2>
+
+  <div class="loading" id="loading">جاري تحميل البيانات...</div>
+  <div class="error-message" id="error"></div>
+  <div id="tableContainer"></div>
+
+  <script>
+  // Custom timeout using AbortController
+  function fetchWithInfiniteTimeout(resource, options = {}) {
+    const controller = new AbortController();
+    options.signal = controller.signal;
+    return fetch(resource, options);
+  }
+
+  fetchWithInfiniteTimeout("http://157.173.218.37:9080/players_evaluation")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("فشل تحميل البيانات");
+      }
+      return response.json();
+    })
+    .then(data => {
+      document.getElementById("loading").style.display = "none";
+
+      if (!data || data.length === 0) {
+        document.getElementById("tableContainer").innerHTML = "<p style='text-align:center'>لا توجد بيانات لعرضها.</p>";
+        return;
+      }
+
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      thead.innerHTML = `
+        <tr>
+          <th>الاسم الكامل</th>
+          <th>اسم المستخدم</th>
+          <th>البريد الإلكتروني</th>
+          <th>رقم الجوال</th>
+          <th>درجة التقييم </th>
+          <th>التقييم العام</th>
+        </tr>`;
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+
+      data.forEach(player => {
+        const rating = player.rank != null ? player.rank : null;
+        let overallRating = "—";
+        if (rating != null) {
+          if (rating >= 90) {
+            overallRating = "ممتاز";
+          } else if (rating >= 75) {
+            overallRating = "جيد";
+          } else if (rating >= 60) {
+            overallRating = "متوسط";
+          } else {
+            overallRating = "ضعيف";
+          }
+        }
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${player.fullname || "—"}</td>
+          <td>${player.username || "—"}</td>
+          <td>${player.email || "—"}</td>
+          <td>${player.mobile || "—"}</td>
+          <td>${rating != null ? rating : "—"}</td>
+          <td>${overallRating}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      table.appendChild(tbody);
+      document.getElementById("tableContainer").appendChild(table);
+    })
+    .catch(err => {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("error").textContent = "حدث خطأ أثناء تحميل البيانات: " + err.message;
+      console.error(err);
+    });
+</script>
+</body>
+</html>

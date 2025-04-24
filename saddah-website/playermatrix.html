@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>مصفوفة اللاعب</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      background: #f3f7f3;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      padding: 8px 8px;
+      background: #AEBFA9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .back-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .matrix-box {
+      background-color: white;
+      margin: 80px auto 20px;
+      max-width: 800px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .matrix-box h2 {
+      margin-top: 0;
+      color: darkgreen;
+      text-align: center;
+    }
+
+    .player-details {
+      margin-top: 20px;
+    }
+
+    .player-details p {
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      border-right: 4px solid #AEBFA9;
+    }
+
+    .error-message {
+      color: red;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .evaluation-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 12px 25px;
+      background-color: #006400;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      text-align: center;
+      cursor: pointer;
+      width: 200px;
+    }
+
+    .evaluation-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="window.location.href='main.html'">⬅️ رجوع</button>
+
+  <div class="matrix-box">
+    <h2>مصفوفة اللاعب</h2>
+    <div class="player-details" id="playerDetails">
+      جاري تحميل البيانات...
+    </div>
+    <div class="error-message" id="errorMessage"></div>
+
+    <!-- إضافة زر "EVALUATION" -->
+    <button class="evaluation-btn" onclick="window.location.href='evaluation.html'">EVALUATION</button>
+  </div>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const playerId = urlParams.get("id");
+
+  if (!playerId) {
+    document.getElementById("playerDetails").textContent = "لم يتم تحديد لاعب.";
+  } else {
+    fetch(`http://157.173.218.37:9080/player_metrics?player_uuid=${playerId}`)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('استجابة غير صالحة من الخادم');
+        }
+        return res.json();
+      })
+      .then(data => {
+        const container = document.getElementById("playerDetails");
+        container.innerHTML = "";
+
+        if (!data || data.length === 0) {
+          container.textContent = "لا توجد بيانات متوفرة لهذا اللاعب.";
+        } else {
+          data.forEach((entry, index) => {
+            const details = document.createElement("details");
+            details.style.marginBottom = "15px";
+            details.style.border = "1px solid #ccc";
+            details.style.borderRadius = "5px";
+            details.style.padding = "10px";
+            details.style.backgroundColor = "#fff";
+
+            const summary = document.createElement("summary");
+            summary.textContent = `📁 سجل رقم ${index + 1} - ${entry.create_date_time}`;
+            summary.style.cursor = "pointer";
+            summary.style.fontWeight = "bold";
+            summary.style.color = "darkgreen";
+            summary.style.marginBottom = "10px";
+            details.appendChild(summary);
+
+            const ul = document.createElement("ul");
+            ul.style.listStyle = "none";
+            ul.style.padding = "10px 15px";
+
+            for (const key in entry) {
+              const li = document.createElement("li");
+              li.innerHTML = `<strong>${key.replace(/_/g, ' ')}:</strong> ${entry[key]}`;
+              li.style.marginBottom = "5px";
+              ul.appendChild(li);
+            }
+
+            details.appendChild(ul);
+            container.appendChild(details);
+          });
+        }
+      })
+      .catch(err => {
+        document.getElementById("playerDetails").textContent = "حدث خطأ أثناء تحميل البيانات.";
+        document.getElementById("errorMessage").textContent = `خطأ: ${err.message}`;
+        console.error(err);
+      });
+  }
+</script>
+
+
+</body>
+</html>

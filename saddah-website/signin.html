@@ -144,7 +144,7 @@
     <div class="container">
             <h1>صدهّ</h1></br>
         <div class="heading">تسجيل جديد</div></br>
-        <form class="form" action="#" onsubmit="redirectToSignin(event)">
+        <form class="form" action="#" onsubmit="registerUser(event)">
             <div class="input-field"><input required type="text" name="full_name" placeholder=" "><label>الاسم الكامل</label></div>
             <div class="input-field"><input required type="text" name="username" placeholder=" " autocomplete="off" pattern="^[a-zA-Z0-9_]+$" title="اسم المستخدم يجب أن يحتوي على أحرف وأرقام فقط بدون مسافات" minlength="4" maxlength="20"><label>اسم المستخدم</label></div>
             <div class="input-field"><input required type="email" name="email" placeholder=" "><label>البريد الإلكتروني</label></div>
@@ -185,7 +185,7 @@
             };
 
             // إرسال البيانات إلى API باستخدام fetch
-            fetch("http://157.173.218.37:5500/register", {
+            fetch("http://157.173.218.37:9080/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
